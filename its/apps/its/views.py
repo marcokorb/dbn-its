@@ -19,7 +19,7 @@ from .models import (
     Evidence,
     UserEvidence,
     UserCourse,
-    UserCourseQuestion    
+    UserCourseQuestion
 )
 from .serializers import (
     CourseSerializer,
@@ -62,9 +62,9 @@ def courses(request):
 def user_question(request):
 
     course = Course.objects.get(id=request.query_params['course_id']) # pylint: disable=maybe-no-member
-    user, _ = User.objects.get_or_create(username=request.query_params['username'])
+    user = User.objects.get(username=request.query_params['username']) # pylint: disable=maybe-no-member
 
-    user_course, _ = UserCourse.objects.get_or_create(course=course, user=user) # pylint: disable=maybe-no-member
+    user_course = UserCourse.objects.get(course=course, user=user) # pylint: disable=maybe-no-member
 
     if user_course.completed:
         pass
@@ -84,79 +84,91 @@ def user_question(request):
 
 @api_view(['POST'])
 def user_answer(request):
+    
+    from IPython import embed; embed()
 
-    # {"question_id": 2, "alternative_id": 1}
+    alternative_id = request.data['alternativeId']
+    question_id = request.data['questionId']
 
-    user = User.objects.get(username=request.query_params['username'])
+    alternative = Alternative.objects.get(id=alternative_id) # pylint: disable=maybe-no-member
+    course = Course.objects.get(id=request.query_params['course_id']) # pylint: disable=maybe-no-member
+    question = Question.objects.get(id=question_id) # pylint: disable=maybe-no-member
+    user = User.objects.get(username=request.query_params['username']) # pylint: disable=maybe-no-member
 
-    with transaction.atomic():
+    course_question = CourseQuestion.objects.get(course=course, question_id=question_id) # pylint: disable=maybe-no-member
 
-        question = Question.objects.get(pk=request.data['questionId'])
+    # {'alternativeId': '13', 'questionId': 3}
 
-        alternative = Alternative.objects.get(pk=request.data['alternativeId'])
+    # user = User.objects.get(username=request.query_params['username'])
 
-        evidences = question.get_evidences(status=alternative.status)
+    # with transaction.atomic():
 
-        bayesian_network = BayesianNetwork()
+    #     question = Question.objects.get(pk=request.data['questionId'])
 
-        UserQuestionHistory.objects.create(
-            question=question,
-            user=user,
-            status=alternative.status
-        )
+    #     alternative = Alternative.objects.get(pk=request.data['alternativeId'])
 
-        print(evidences)
+    #     evidences = question.get_evidences(status=alternative.status)
 
-        for new_evidence, status in evidences.items():
+    #     bayesian_network = BayesianNetwork()
 
-            evidence = QuestionEvidence.objects.get(name=new_evidence)
+    #     UserQuestionHistory.objects.create(
+    #         question=question,
+    #         user=user,
+    #         status=alternative.status
+    #     )
 
-            user_evidence, _ = UserEvidence.objects.get_or_create(
-                user=user,
-                evidence=evidence
-            )
+    #     print(evidences)
 
-            user_evidence.status = status
-            user_evidence.save()
+    #     for new_evidence, status in evidences.items():
 
-            current_evidences = {}
+    #         evidence = QuestionEvidence.objects.get(name=new_evidence)
 
-            for predecessor in bayesian_network.get_predecessors(new_evidence):
+    #         user_evidence, _ = UserEvidence.objects.get_or_create(
+    #             user=user,
+    #             evidence=evidence
+    #         )
 
-                # Iteration through all successors of each predecessor
-                for successor in bayesian_network.get_successors(predecessor):
+    #         user_evidence.status = status
+    #         user_evidence.save()
 
-                    if UserEvidence.objects.filter(evidence__name=successor, user=user).exists():
+    #         current_evidences = {}
 
-                        # Add to the evidence set
-                        current_evidences.update({successor: int(UserEvidence.objects.get(evidence__name=successor, user=user).status)})
+    #         for predecessor in bayesian_network.get_predecessors(new_evidence):
 
-                print(current_evidences)
+    #             # Iteration through all successors of each predecessor
+    #             for successor in bayesian_network.get_successors(predecessor):
 
-                if Subject.objects.filter(name=predecessor).exists():
+    #                 if UserEvidence.objects.filter(evidence__name=successor, user=user).exists():
 
-                    subject = Subject.objects.get(name=predecessor)
+    #                     # Add to the evidence set
+    #                     current_evidences.update({successor: int(UserEvidence.objects.get(evidence__name=successor, user=user).status)})
 
-                    updated_value = bayesian_network.query_evidence(
-                        predecessor,
-                        current_evidences
-                    )
+    #             print(current_evidences)
 
-                    user_subject, _ = UserSubject.objects.get_or_create(
-                        user=user,
-                        subject=subject
-                    )
+    #             if Subject.objects.filter(name=predecessor).exists():
 
-                    user_subject.value = updated_value
-                    user_subject.time_index += 1
+    #                 subject = Subject.objects.get(name=predecessor)
 
-                    user_subject.save()
+    #                 updated_value = bayesian_network.query_evidence(
+    #                     predecessor,
+    #                     current_evidences
+    #                 )
 
-                print(updated_value, predecessor, current_evidences)
+    #                 user_subject, _ = UserSubject.objects.get_or_create(
+    #                     user=user,
+    #                     subject=subject
+    #                 )
 
-                # Clear the evidence set for the next iteration
-                current_evidences.clear()
+    #                 user_subject.value = updated_value
+    #                 user_subject.time_index += 1
 
-    return Response({
-        'alternative_status': alternative.status,
-    })
+    #                 user_subject.save()
+
+    #             print(updated_value, predecessor, current_evidences)
+
+    #             # Clear the evidence set for the next iteration
+    #             current_evidences.clear()
+
+    # return Response({
+    #     'alternative_status': alternative.status,
+    # })

@@ -1,6 +1,8 @@
 Django
-pgmpy
 pandas
 djangorestframework
 wrapt
 djangorestframework-recursive
+pyAgrum
+pydotplus
+ipykernel

@@ -7,8 +7,7 @@ __all__ = [
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from .evidence import Evidence
-from .subject import Subject
+from .node import Node
 
 
 class Network(models.Model):
@@ -36,12 +35,21 @@ class NetworkSubject(models.Model):
     )
 
     subject = models.ForeignKey(
-        Subject,
+        Node,
         on_delete=models.CASCADE,
-        related_name='networks'
+        related_name='networks_subjects'
     )
 
-    evidences = models.ManyToManyField(Evidence)
+    subjects = models.ManyToManyField(
+        Node,
+        blank=True,
+        related_name='networks_subjects_parents'
+    )
+
+    evidences = models.ManyToManyField(
+        Node,
+        related_name='networks_subjects_evidences'
+    )
 
     def __str__(self):
         return f'{self.pk} - {self.network.name} - {self.subject.name}' # pylint: disable=maybe-no-member

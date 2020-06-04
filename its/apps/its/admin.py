@@ -6,12 +6,11 @@ from .models import (
     Alternative,
     Course,
     CourseQuestion,
-    Evidence,    
     UserEvidence,
     Network,
     NetworkSubject,
-    Question,
-    Subject,
+    Node,
+    Question,    
     UserSubject,
     UserCourse,
     UserCourseEvidence,
@@ -41,16 +40,10 @@ admin.site.register(Course, CourseAdmin)
 admin.site.register(CourseQuestion, CourseQuestionAdmin)
 
 
-class EvidenceAdmin(admin.ModelAdmin):
-
-    ordering = ('name',)
-
-
 class UserEvidenceAdmin(admin.ModelAdmin):
     pass
 
 
-admin.site.register(Evidence, EvidenceAdmin)
 admin.site.register(UserEvidence, UserEvidenceAdmin)
 
 
@@ -76,16 +69,16 @@ class QuestionAdmin(admin.ModelAdmin):
 admin.site.register(Question, QuestionAdmin)
 
 
-class SubjectAdmin(admin.ModelAdmin):
+class NodeAdmin(admin.ModelAdmin):
 
-    ordering = ('name',)
+    ordering = ('is_evidence', 'name')
 
 
 class UserSubjectAdmin(admin.ModelAdmin):
     pass
 
 
-admin.site.register(Subject, SubjectAdmin)
+admin.site.register(Node, NodeAdmin)
 admin.site.register(UserSubject, UserSubjectAdmin)
 
 

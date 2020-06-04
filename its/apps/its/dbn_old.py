@@ -1,55 +1,31 @@
 # -*- coding: utf-8 -*-
 
-__all__ = ['DBN']
+__all__ = [
+    'BayesianNetwork'
+]
 
-import pyAgrum as gum
-import pyAgrum.lib.notebook as gnb
-import pyAgrum.lib.dynamicBN as gdyn
+from networkx.algorithms.dag import ancestors, descendants
+from pgmpy.factors.discrete import TabularCPD
+from pgmpy.inference import VariableElimination
+from pgmpy.models import BayesianModel, DynamicBayesianNetwork
 
 
-from .models import Course
+class DNB(object):
 
+    def __init__(self):
 
-class DBN(object):
-
-    def __init__(self, course=None):
-
-        twodbn = gum.BayesNet()
-
-        course = Course.objects.get(id=1)
-        network = course.network
-
-        network_subjects = network.subjects.all()
-
-        # Add subjecs and evidences as nodes to DBN
-        for network_subject in network_subjects:
-
-            evidences = network_subject.evidences.all()
-            subject = network_subject.subject
-
-            twodbn.add(
-                gum.LabelizedVariable(
-                    subject.code,
-                    subject.code,
-                    2
-                ),
-                subject.id
-            )
-
-            for evidence in evidences:
-
-                twodbn.add(
-                    gum.LabelizedVariable(
-                        evidence.code,
-                        evidence.code,
-                        2
-                    ),
-                    evidence.id
-                )
-
-        from IPython import embed; embed()
-
-        return
+        self.dbn = DBN()
+        self.dbn.add_edges_from(
+            [
+                (('CA', 0), ('C', 0)),
+                (('CA', 0), ('C', 0)),
+                (('CT', 0), ('H', 0)),
+                (('CA', 0), ('H', 0)),
+                (('C', 0), ('P', 0)),
+                (('H', 0), ('P', 0)),
+                (('CA', 0), ('CA', 1))
+            ]
+        )
 
         self.model = DynamicBayesianNetwork()
 

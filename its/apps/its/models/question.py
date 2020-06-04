@@ -5,7 +5,7 @@ __all__ = ['Question']
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from .evidence import Evidence
+from .node import Node
 
 
 class Question(models.Model):
@@ -21,7 +21,7 @@ class Question(models.Model):
         max_length=255
     )
 
-    evidences = models.ManyToManyField(Evidence)
+    evidences = models.ManyToManyField(Node, blank=True)
 
     def __str__(self):
 

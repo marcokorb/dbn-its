@@ -14,9 +14,7 @@ from .models import (
     Course,
     CourseQuestion,
     Question,
-    Subject,
     UserSubject,
-    Evidence,
     UserEvidence,
     UserCourse,
     UserCourseQuestion
@@ -95,7 +93,16 @@ def user_answer(request):
     question = Question.objects.get(id=question_id) # pylint: disable=maybe-no-member
     user = User.objects.get(username=request.query_params['username']) # pylint: disable=maybe-no-member
 
-    course_question = CourseQuestion.objects.get(course=course, question_id=question_id) # pylint: disable=maybe-no-member
+    course_question = CourseQuestion.objects.get(course=course, question=question) # pylint: disable=maybe-no-member
+
+    user_course_question, _ = UserCourseQuestion.objects.get_or_create( # pylint: disable=maybe-no-member
+        course_question=course_question,
+        network=course.network,
+        user=user
+    )
+
+    user_course_question.status = alternative.status
+    user_course_question.save()
 
     # {'alternativeId': '13', 'questionId': 3}
 

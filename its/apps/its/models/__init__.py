@@ -4,10 +4,12 @@ __all__ = [
 	'Alternative',
 	'Course',
 	'CourseQuestion',
+	'Evidence',
 	'UserEvidence',
 	'Network',
 	'NetworkSubject',
 	'Question',
+	'Subject',
 	'UserSubject',
 	'UserCourse',
 	'UserCourseEvidence',
@@ -23,12 +25,15 @@ from .network import (
 	Network,
 	NetworkSubject
 )
-from .node import (
-	Node,
-	UserEvidence,
-	UserSubject
+from .evidence import (
+	Evidence,
+	UserEvidence
 )
 from .question import Question
+from .subject import (
+	Subject,
+	UserSubject
+)
 from .user_course import (
 	UserCourse,
 	UserCourseEvidence,

@@ -2,7 +2,6 @@
 
 __all__ = [
     'Subject',
-    'UserEvidence',
     'UserSubject'
 ]
 
@@ -11,7 +10,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 
-class Node(models.Model):
+class Subject(models.Model):
 
     code = models.CharField(
         _('Código'),
@@ -23,51 +22,15 @@ class Node(models.Model):
         max_length=50
     )
 
-    is_evidence = models.BooleanField(
-      _('É uma evidência?'),
-      default=False
-    )
-
     def __str__(self):
 
-        evidence_description = ' - Evidência' if self.is_evidence else ''
-
-        return f'{self.pk} - {self.name} {evidence_description}'
-
-
-class UserEvidence(models.Model):
-
-    node = models.ForeignKey(
-        Node,
-        on_delete=models.CASCADE,
-        related_name='users_evidences'
-    )
-
-    user = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        related_name='evidences'
-    )
-
-    time_slice = models.IntegerField(
-        _('Expansão no Tempo'),
-        default=0
-    )
-
-    observations = models.CharField(
-        _('Observações'),
-        default='',
-        max_length=255
-    )
-
-    def __str__(self):
-        return f'{self.user.username} - {self.evidence.name}' # pylint: disable=maybe-no-member
+        return f'{self.pk} - {self.name}'
 
 
 class UserSubject(models.Model):
 
-    node = models.ForeignKey(
-        Node,
+    subject = models.ForeignKey(
+        Subject,
         on_delete=models.CASCADE,
         related_name='users_subjects'
     )

@@ -14,7 +14,7 @@ from .course import (
     Course,
     CourseQuestion
 )
-from .node import Node
+from .evidence import Evidence
 from .network import Network
 from .question import Question
 
@@ -47,8 +47,8 @@ class UserCourseEvidence(models.Model):
         related_name='user_evidences'
     )
 
-    node = models.ForeignKey(
-        Node,
+    evidence = models.ForeignKey(
+        Evidence,
         on_delete=models.CASCADE,
         related_name='user_courses'
     )

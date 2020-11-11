@@ -6,3 +6,5 @@ djangorestframework-recursive
 pyAgrum
 pydotplus
 ipykernel
+django-cors-headers
+matplotlib

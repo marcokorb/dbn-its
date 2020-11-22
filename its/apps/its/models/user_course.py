@@ -77,6 +77,13 @@ class UserCourseEvidence(models.Model):
 
 class UserCourseQuestion(models.Model):
 
+    course = models.ForeignKey(
+        Course,
+        on_delete=models.CASCADE,
+        related_name='users_questions',
+        default=None,
+    )
+
     course_question = models.ForeignKey(
         CourseQuestion,
         on_delete=models.CASCADE,

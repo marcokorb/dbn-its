@@ -12,7 +12,8 @@ from rest_framework import serializers
 from .models import (
     Alternative,
     Course,
-    Question
+    CourseQuestion,
+    Question,
 )
 
 
@@ -21,13 +22,6 @@ class AlternativeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Alternative
         fields = ('pk', 'content', 'number', 'status')
-
-
-class CourseSerializer(serializers.ModelSerializer):
-    
-    class Meta:
-        model = Course
-        fields = ('pk', 'name')
 
 
 class QuestionSerializer(serializers.ModelSerializer):
@@ -44,3 +38,19 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('pk', 'username')
+
+
+
+class CourseSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Course
+        fields = ('pk', 'name')
+
+
+class CourseQuestionSerializer(serializers.ModelSerializer):
+    
+    question = QuestionSerializer(read_only=True)
+    class Meta:
+        model = CourseQuestion
+        fields = ('pk', 'number', 'question')

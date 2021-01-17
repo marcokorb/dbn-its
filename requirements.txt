@@ -8,3 +8,5 @@ pydotplus
 ipykernel
 django-cors-headers
 matplotlib
+django_extensions
+jupyterlab

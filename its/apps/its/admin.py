@@ -10,6 +10,7 @@ from .models import (
     UserEvidence,
     Network,
     NetworkSubject,
+    NetworkSubjectProbabilities,
     Question,
     Subject,
     UserSubject,
@@ -18,6 +19,13 @@ from .models import (
     UserCourseQuestion
 )
 
+# I need at least two tables:
+# One for parent subjects and evidences?
+# Other for transitions?
+
+class TableTest(admin.TabularInline):
+    model = CourseQuestion
+    template = 'admin/table.html'
 
 class AlternativeAdmin(admin.ModelAdmin):
 
@@ -30,6 +38,9 @@ admin.site.register(Alternative, AlternativeAdmin)
 class CourseAdmin(admin.ModelAdmin):
 
     ordering = ('pk',)
+    inlines = (
+        TableTest,
+    )
 
 
 class CourseQuestionAdmin(admin.ModelAdmin):
@@ -64,8 +75,14 @@ class NetworkSubjectAdmin(admin.ModelAdmin):
     ordering = ('network_id', 'subject__name')
 
 
+class NetworkSubjectProbabilitiesAdmin(admin.ModelAdmin):
+
+    ordering = ('pk',)
+
+
 admin.site.register(Network, NetworkAdmin)
 admin.site.register(NetworkSubject, NetworkSubjectAdmin)
+admin.site.register(NetworkSubjectProbabilities, NetworkSubjectProbabilitiesAdmin)
 
 
 class QuestionAdmin(admin.ModelAdmin):

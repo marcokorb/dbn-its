@@ -55,12 +55,25 @@ class DBNModel(object):
 
         return node
 
+    def add_probabilities(self, probabilities):
+
+        for probability in probabilities:
+            if 'relations' in probability:
+                for relation in probability['relations']:
+                    condition = {code['code']: int(code['status']) for code in relation['codes']}
+                    self.twodbn.cpt(probability['code'])[condition] = relation['values']
+            else:
+                self.twodbn.cpt(probability['code']).fillWith(probability['values'])
+
     def setup_arcs(self):
 
         for network_subject in self.network_subjects:
 
+            # Todo: We should cache the evidences to avoid double queries.
+            #  It is used here and in setup_nodes.
             evidences = network_subject.evidences.all()
-            parent_subjects = network_subject.subjects.all()
+            parent_subjects = network_subject.network_subjects.all()
+
             subject = network_subject.subject
 
             subjec_code0 = f'{subject.code}0'
@@ -95,10 +108,30 @@ class DBNModel(object):
                 
                 self.add_node(f'{evidence.code}0')
                 self.add_node(f'{evidence.code}t')
+    
+    def setup_probabilities(self):
+
+        for network_subject in self.network_subjects:
+
+            probabilities = network_subject.probabilities.get()
+
+            self.add_probabilities(probabilities=probabilities.subjects_probabilities)
+            self.add_probabilities(probabilities=probabilities.evidences_probabilities)
 
     def setup(self):
 
         self.setup_nodes()
+        self.setup_arcs()
+        self.setup_probabilities()
+    
+    def inference(self, evidences, subject):
+
+        ie = gum.VariableElimination(self.twodbn)
+        ie.setEvidence(evidences)
+        ie.makeInference()
+
+        return ie.posterior(subject)
+
 
 class DBN(object):
 

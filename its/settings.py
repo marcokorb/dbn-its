@@ -136,16 +136,16 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 # Jupyter Lab
-try:
-    import jupyterlab
-    notebook_default_url = '/lab'  # Using JupyterLab
-except ImportError:
-    notebook_default_url = '/tree'  # Using Jupyter
+# try:
+#     import jupyterlab
+#     notebook_default_url = '/lab'  # Using JupyterLab
+# except ImportError:
+#     notebook_default_url = '/tree'  # Using Jupyter
 
-NOTEBOOK_ARGUMENTS = [
-    '--ip', '0.0.0.0',
-    '--port', '8888',
-    '--notebook-dir', '.',
-    '--NotebookApp.default_url', notebook_default_url,
-]
+# NOTEBOOK_ARGUMENTS = [
+#     '--ip=', '0.0.0.0',
+#     '--port=', '8888',
+#     '--notebook-dir=', '.',
+#     '--NotebookApp.default_url=', notebook_default_url,
+# ]
 IPYTHON_KERNEL_DISPLAY_NAME = 'Django Kernel'

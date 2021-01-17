@@ -74,14 +74,12 @@ class UserCourseEvidence(models.Model):
         return f'{self.user.username} - {self.evidence.name}' # pylint: disable=maybe-no-member
 
 
-
 class UserCourseQuestion(models.Model):
 
     course = models.ForeignKey(
         Course,
         on_delete=models.CASCADE,
-        related_name='users_questions',
-        default=None,
+        related_name='users_questions'
     )
 
     course_question = models.ForeignKey(

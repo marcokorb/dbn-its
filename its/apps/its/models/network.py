@@ -4,6 +4,7 @@ __all__ = [
     'Network'
 ]
 
+from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -54,3 +55,29 @@ class NetworkSubject(models.Model):
 
     def __str__(self):
         return f'{self.pk} - {self.network.name} - {self.subject.name}' # pylint: disable=maybe-no-member
+
+
+class NetworkSubjectProbabilities(models.Model):
+
+    network_subject = models.ForeignKey(
+        NetworkSubject,
+        on_delete=models.CASCADE,
+        related_name='probabilities'
+    )
+
+    # Todo: This model is unnecessary and should be replaced 
+    #  in the future because it does not really make sense.
+    #  For, we will use it as experiment to have a simple way 
+    #  to store the probabilities.
+
+    # 'subjects_probabilities' contains the initial and transition values.
+    subjects_probabilities = models.JSONField(
+        blank=True, null=True, encoder=DjangoJSONEncoder
+    )
+
+    evidences_probabilities = models.JSONField(
+        blank=True, null=True, encoder=DjangoJSONEncoder
+    )
+
+    def __str__(self):
+        return f'{self.network_subject} - Probabilities' # pylint: disable=maybe-no-member

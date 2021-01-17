@@ -30,6 +30,10 @@ class Course(models.Model):
     def __str__(self):
         return f'{self.pk} - {self.name}'
 
+    def get_user_last_question(self, user):
+
+        pass
+
 
 class CourseQuestion(models.Model):
 
@@ -44,7 +48,6 @@ class CourseQuestion(models.Model):
         on_delete=models.CASCADE,
         related_name='courses'
     )
-
 
     number = models.IntegerField(
         _('Número'),

@@ -8,6 +8,7 @@ __all__ = [
 	'UserEvidence',
 	'Network',
 	'NetworkSubject',
+	'NetworkSubjectProbabilities',
 	'Question',
 	'Subject',
 	'UserSubject',
@@ -23,7 +24,8 @@ from. course import (
 )
 from .network import (
 	Network,
-	NetworkSubject
+	NetworkSubject,
+	NetworkSubjectProbabilities,
 )
 from .evidence import (
 	Evidence,

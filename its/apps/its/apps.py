@@ -1,7 +1,8 @@
-# -*- coding: utf-8 -*-
-
+"""ITS app."""
 from django.apps import AppConfig
 
 
 class ITSConfig(AppConfig):
-    name = 'its'
+    """ITS app config."""
+
+    name = "its"

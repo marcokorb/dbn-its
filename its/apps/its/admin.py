@@ -1,5 +1,5 @@
-# -*- coding: utf-8 -*-
-
+"""Admin models."""
+from django import forms
 from django.contrib import admin
 
 from .models import (
@@ -7,45 +7,45 @@ from .models import (
     Course,
     CourseQuestion,
     Evidence,
-    UserEvidence,
     Network,
     NetworkSubject,
     NetworkSubjectProbabilities,
     Question,
     Subject,
-    UserSubject,
     UserCourse,
     UserCourseEvidence,
-    UserCourseQuestion
+    UserCourseQuestion,
+    UserEvidence,
+    UserSubject,
 )
 
 # I need at least two tables:
 # One for parent subjects and evidences?
 # Other for transitions?
 
-class TableTest(admin.TabularInline):
-    model = CourseQuestion
-    template = 'admin/table.html'
 
 class AlternativeAdmin(admin.ModelAdmin):
+    """Alternative admin model."""
 
-    ordering = ('question__pk', 'number')
+    ordering = ("question__pk", "number")
 
 
 admin.site.register(Alternative, AlternativeAdmin)
 
 
 class CourseAdmin(admin.ModelAdmin):
+    """Course admin model."""
 
-    ordering = ('pk',)
-    inlines = (
-        TableTest,
-    )
+    ordering = ("pk",)
 
 
 class CourseQuestionAdmin(admin.ModelAdmin):
-    
-    ordering = ('course__pk', 'number', )
+    """Course question admin model."""
+
+    ordering = (
+        "course__pk",
+        "number",
+    )
 
 
 admin.site.register(Course, CourseAdmin)
@@ -53,11 +53,14 @@ admin.site.register(CourseQuestion, CourseQuestionAdmin)
 
 
 class EvidenceAdmin(admin.ModelAdmin):
-    
-    ordering = ('name',)
+    """Evidence admin model."""
+
+    ordering = ("name",)
 
 
 class UserEvidenceAdmin(admin.ModelAdmin):
+    """UserEvidence admin model."""
+
     pass
 
 
@@ -66,39 +69,48 @@ admin.site.register(UserEvidence, UserEvidenceAdmin)
 
 
 class NetworkAdmin(admin.ModelAdmin):
-    
-    ordering = ('pk',)
+    """Network admin model."""
+
+    ordering = ("pk",)
 
 
 class NetworkSubjectAdmin(admin.ModelAdmin):
-    
-    ordering = ('network_id', 'subject__name')
+    """Network subject admin model."""
+
+    ordering = ("network_id", "subject__name")
 
 
 class NetworkSubjectProbabilitiesAdmin(admin.ModelAdmin):
+    """Network subject probabilities admin model."""
 
-    ordering = ('pk',)
+    ordering = ("pk",)
 
 
 admin.site.register(Network, NetworkAdmin)
 admin.site.register(NetworkSubject, NetworkSubjectAdmin)
-admin.site.register(NetworkSubjectProbabilities, NetworkSubjectProbabilitiesAdmin)
+admin.site.register(
+    NetworkSubjectProbabilities, NetworkSubjectProbabilitiesAdmin
+)
 
 
 class QuestionAdmin(admin.ModelAdmin):
+    """Question admin model."""
 
-    ordering = ('description',)
+    ordering = ("description",)
 
 
 admin.site.register(Question, QuestionAdmin)
 
 
 class SubjectAdmin(admin.ModelAdmin):
+    """Subject admin model."""
 
-    ordering = ('name',)
+    ordering = ("name",)
 
 
 class UserSubjectAdmin(admin.ModelAdmin):
+    """User subject admin model."""
+
     pass
 
 
@@ -107,14 +119,20 @@ admin.site.register(UserSubject, UserSubjectAdmin)
 
 
 class UserCourseAdmin(admin.ModelAdmin):
+    """UserCourse admin model."""
+
     pass
 
 
 class UserCourseEvidenceAdmin(admin.ModelAdmin):
+    """UserCourseEvidence admin model."""
+
     pass
 
 
 class UserCourseQuestionAdmin(admin.ModelAdmin):
+    """UserCourseQuestion admin model."""
+
     pass
 
 
